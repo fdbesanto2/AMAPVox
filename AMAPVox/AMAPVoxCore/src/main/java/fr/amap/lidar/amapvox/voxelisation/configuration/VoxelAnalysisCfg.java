@@ -32,6 +32,7 @@ import fr.amap.lidar.amapvox.shot.filter.ShotDecimationFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -88,7 +89,7 @@ public class VoxelAnalysisCfg extends Configuration {
     protected Element limitsElement;
     protected Element filtersElement;
     protected Element echoFilteringElement;
-    
+
     public VoxelAnalysisCfg() {
         shotFilters = new ArrayList();
         echoFilters = new ArrayList();
@@ -204,7 +205,7 @@ public class VoxelAnalysisCfg extends Configuration {
         if (transmittanceElement != null) {
             voxelParameters.setBeamSectionConstant(Boolean.valueOf(transmittanceElement.getAttributeValue("constantBeamSection")));
             voxelParameters.setRayPonderationEnabled(Boolean.valueOf(transmittanceElement.getAttributeValue("rayPonderationEnabled")));
-            
+
         }
 
         Element dtmFilterElement = processElement.getChild("dtm-filter");
@@ -271,7 +272,7 @@ public class VoxelAnalysisCfg extends Configuration {
                                 ? MatrixUtility.convertMatrix4dToMat4D(getVopMatrix())
                                 : Mat4D.identity();
                         echoFilters.add(new PointcloudFilter(file,
-                                Float.valueOf(e.getAttributeValue("error-margin")), 
+                                Float.valueOf(e.getAttributeValue("error-margin")),
                                 behavior, vop));
                     }
                 }
@@ -372,35 +373,70 @@ public class VoxelAnalysisCfg extends Configuration {
         Element laserSpecElement = processElement.getChild("laser-specification");
 
         if (laserSpecElement != null) {
-
+            // laser-specification element exist in XML configuration file
             String laserSpecName = laserSpecElement.getAttributeValue("name");
+            double beamDivergence = Double.valueOf(laserSpecElement.getAttributeValue("beam-divergence"));
+            double beamDiameterAtExit = Double.valueOf(laserSpecElement.getAttributeValue("beam-diameter-at-exit"));
+            boolean monoEcho = true;
+            if (null != laserSpecElement.getAttribute("mono-echo")) {
+                // AMAPVox > 1.0.#
+                monoEcho = Boolean.valueOf(laserSpecElement.getAttributeValue("mono-echo"));
+            } else {
+                // AMAPVox 1.0.#, the mono-echo attribute did not exist yet
+                // check if the laser specification is among the presets
+                // and set the mono echo property accordingly
+                boolean monoEchoSet = false;
+                for (LaserSpecification laserSpec : LaserSpecification.getPresets()) {
+                    if (laserSpecName.equalsIgnoreCase(laserSpec.getName())) {
+                        monoEcho = laserSpec.isMonoEcho();
+                        monoEchoSet = true;
+                        break;
+                    }
+                }
+                // laser specification not found amon presets, better not make
+                // any guess and throw error message
+                if (!monoEchoSet) {
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("Could not find mono-echo attribute in the laser specification. ");
+                    msg.append("Edit manually the XML configuration file and add missing attribute <laser-specification mono-echo=\"true|false\"");
+                    LOGGER.error(msg.toString());
+                    throw new IOException("laser specification mono-echo attribute missing"); 
+                }
+            }
 
-            switch (laserSpecName) {
-                case "LMS_Q560":
-                case "DEFAULT_ALS":
+            // check with preset values
+            for (LaserSpecification laserSpec : LaserSpecification.getPresets()) {
+                if (laserSpecName.equalsIgnoreCase(laserSpec.getName())) {
+                    if (beamDiameterAtExit != laserSpec.getBeamDiameterAtExit()) {
+                        LOGGER.warn("Laser " + laserSpecName + " beam diameter at exit " + beamDiameterAtExit + " differs from preset value " + laserSpec.getBeamDiameterAtExit());
+                    }
+                    if (beamDivergence != laserSpec.getBeamDivergence()) {
+                        LOGGER.warn("Laser " + laserSpecName + " beam divergence " + beamDivergence + " differs from preset value " + laserSpec.getBeamDivergence());
+                    }
+                    if (monoEcho != laserSpec.isMonoEcho()) {
+                        LOGGER.warn("Laser " + laserSpecName + " mono echo " + monoEcho + " differs from preset value " + laserSpec.isMonoEcho());
+                    }
+                    break;
+                }
+            }
+
+            voxelParameters.setLaserSpecification(new LaserSpecification(laserSpecName, beamDiameterAtExit, beamDivergence, monoEcho));
+        } else {
+            // laser-specification element does not exist in XML configuration file
+            // provide default value according to voxelisation type ALS | TLS
+            switch (processTypeValue) {
+                case "ALS":
                     voxelParameters.setLaserSpecification(LaserSpecification.LMS_Q560);
                     break;
-                case "LEICA_SCANSTATION_C10":
-                    voxelParameters.setLaserSpecification(LaserSpecification.LEICA_SCANSTATION_C10);
-                    break;
-                case "VZ_400":
+                case "TLS":
                     voxelParameters.setLaserSpecification(LaserSpecification.VZ_400);
                     break;
-                case "LEICA_SCANSTATION_P30_40":
-                    voxelParameters.setLaserSpecification(LaserSpecification.LEICA_SCANSTATION_P30_40);
-                    break;
-                case "custom":
-                    String beamDivergenceStr = laserSpecElement.getAttributeValue("beam-divergence");
-                    String beamDiameterAtExitStr = laserSpecElement.getAttributeValue("beam-diameter-at-exit");
-
-                    if (beamDivergenceStr != null && beamDiameterAtExitStr != null) {
-                        voxelParameters.setLaserSpecification(new LaserSpecification(Double.valueOf(beamDiameterAtExitStr), Double.valueOf(beamDivergenceStr), "custom"));
-                    }
-
-                    break;
                 default:
-                    voxelParameters.setLaserSpecification(null);
+                    // unexpected voxelisation type, throw error
+                    throw new IOException("Please set laser specification in the configuration file.");
             }
+            // inform user that a default value has been set
+            LOGGER.warn("Could not find laser specification element in configuration file. Default specification:\n" + voxelParameters.getLaserSpecification().toString());
         }
 
         Element ladElement = processElement.getChild("leaf-angle-distribution");
@@ -526,7 +562,7 @@ public class VoxelAnalysisCfg extends Configuration {
         laserSpecElement.setAttribute("name", voxelParameters.getLaserSpecification().getName());
         laserSpecElement.setAttribute("beam-diameter-at-exit", String.valueOf(voxelParameters.getLaserSpecification().getBeamDiameterAtExit()));
         laserSpecElement.setAttribute("beam-divergence", String.valueOf(voxelParameters.getLaserSpecification().getBeamDivergence()));
-
+        laserSpecElement.setAttribute("mono-echo", String.valueOf(voxelParameters.getLaserSpecification().isMonoEcho()));
         processElement.addContent(laserSpecElement);
 
         /**
@@ -647,7 +683,7 @@ public class VoxelAnalysisCfg extends Configuration {
             filtersElement.addContent(echoFilterElement);
         }
         processElement.addContent(filtersElement);
-        
+
         pointcloudFiltersElement.setAttribute(new Attribute("enabled", String.valueOf(pointcloudFiltersElement.getContentSize() > 0)));
         processElement.addContent(pointcloudFiltersElement);
 
@@ -775,8 +811,8 @@ public class VoxelAnalysisCfg extends Configuration {
     public void addEchoFilter(Filter<Shot.Echo> filter) {
         this.echoFilters.add(filter);
     }
-    
-     public boolean removeEchoFilter(Filter<Shot.Echo> filter) {
+
+    public boolean removeEchoFilter(Filter<Shot.Echo> filter) {
         return this.echoFilters.remove(filter);
     }
 

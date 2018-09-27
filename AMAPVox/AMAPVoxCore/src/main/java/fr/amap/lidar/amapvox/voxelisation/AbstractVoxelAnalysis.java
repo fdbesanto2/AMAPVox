@@ -211,15 +211,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
         }
 
         MAX_PAD = parameters.infos.getMaxPAD();
-
+        
         laserSpec = parameters.getLaserSpecification();
-        if (laserSpec == null) {
-            if (parameters.infos.getType() == VoxelSpaceInfos.Type.TLS) {
-                laserSpec = LaserSpecification.VZ_400;
-            } else {
-                laserSpec = LaserSpecification.LMS_Q560;
-            }
-        }
 
         LADParams ladParameters = parameters.getLadParams();
         if (ladParameters == null) {

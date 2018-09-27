@@ -705,6 +705,14 @@
                                                                                                         <TextField fx:id="textFieldBeamDivergence" disable="true" prefHeight="26.0" prefWidth="80.0" text="0.005" />
                                                                                                     </children>
                                                                                                 </HBox>
+                                                                                                <CheckBox fx:id="checkboxMonoEcho" disable="true" prefHeight="26.0" text="Mono-echo">
+                                                                                                    <font>
+                                                                                                        <Font size="12.0" />
+                                                                                                    </font>
+                                                                                                    <tooltip>
+                                                                                                        <Tooltip text="Selected = mono-echo, unselected = multi-echo"/>
+                                                                                                    </tooltip>
+                                                                                                </CheckBox>
                                                                                             </children>
                                                                                         </VBox>
                                                                                     </children>
@@ -800,18 +808,18 @@
                                                                             </content>
                                                                         </Tab>
                                                                         <Tab text="Transmittance">
-                                                                           <content>
-                                                                              <AnchorPane>
-                                                                                 <children>
-                                                                                    <VBox spacing="15.0" AnchorPane.topAnchor="25.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0">
-                                                                                       <children>
-                                                                                          <CheckBox fx:id="checkboxConstantBeamSection" mnemonicParsing="false" text="Constant beam section ?" />
-                                                                                          <CheckBox fx:id="checkboxRayPonderationEnabled" mnemonicParsing="false" text="Ray ponderation enabled ?" />
-                                                                                       </children>
-                                                                                    </VBox>
-                                                                                 </children>
-                                                                              </AnchorPane>
-                                                                           </content>
+                                                                            <content>
+                                                                                <AnchorPane>
+                                                                                    <children>
+                                                                                        <VBox spacing="15.0" AnchorPane.topAnchor="25.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0">
+                                                                                            <children>
+                                                                                                <CheckBox fx:id="checkboxConstantBeamSection" mnemonicParsing="false" text="Constant beam section ?" />
+                                                                                                <CheckBox fx:id="checkboxRayPonderationEnabled" mnemonicParsing="false" text="Ray ponderation enabled ?" />
+                                                                                            </children>
+                                                                                        </VBox>
+                                                                                    </children>
+                                                                                </AnchorPane>
+                                                                            </content>
                                                                         </Tab>
                                                                         <Tab text="Other">
                                                                             <content>

@@ -14,26 +14,29 @@ import java.util.List;
  * @author Julien Heurtebize
  */
 public class LaserSpecification {
+
+    public final static LaserSpecification LMS_Q560 = new LaserSpecification("LMS_Q560", 0.0003, 0.0005, false);
+    public final static LaserSpecification LMS_Q780 = new LaserSpecification("LMS_Q780", 0.005, 0.00025, false);
+    public final static LaserSpecification VZ_400 = new LaserSpecification("VZ_400", 0.007, 0.00035, false);
+    public final static LaserSpecification LEICA_SCANSTATION_P30_40 = new LaserSpecification("LEICA_SCANSTATION_P30_40", 0.0035, 0.00023, true);
+    public final static LaserSpecification LEICA_SCANSTATION_C10 = new LaserSpecification("LEICA_SCANSTATION_C10", 0.004, 0.0001, true);
+    public final static LaserSpecification FARO_FOCUS_X330 = new LaserSpecification("FARO_FOCUS_X330", 0.0025, 0.00019, true);
     
-    public final static LaserSpecification LMS_Q560 = new LaserSpecification(0.0003, 0.0005, "LMS_Q560");
-    public final static LaserSpecification VZ_400 = new LaserSpecification(0.007, 0.00035, "VZ_400");
-    public final static LaserSpecification LEICA_SCANSTATION_P30_40 = new LaserSpecification(0.0035, 0.00023, "LEICA_SCANSTATION_P30_40");
-    public final static LaserSpecification LEICA_SCANSTATION_C10 = new LaserSpecification(0.004, 0.0001, "LEICA_SCANSTATION_C10");
     
     private final double beamDiameterAtExit;
     private final double beamDivergence;
     private final String name;
-
-    public LaserSpecification(double beamDiameterAtExit, double beamDivergence) {
-        this.beamDiameterAtExit = beamDiameterAtExit;
-        this.beamDivergence = beamDivergence;
-        this.name = "custom";
-    }
+    private final boolean monoEcho;
     
-    public LaserSpecification(double beamDiameterAtExit, double beamDivergence, String name) {
+    public LaserSpecification(String name, double beamDiameterAtExit, double beamDivergence, boolean monoEcho) {
         this.beamDiameterAtExit = beamDiameterAtExit;
         this.beamDivergence = beamDivergence;
         this.name = name;
+        this.monoEcho = monoEcho;
+    }
+
+    public LaserSpecification(double beamDiameterAtExit, double beamDivergence, boolean monoEcho) {
+        this("custum", beamDiameterAtExit, beamDivergence, monoEcho);
     }
 
     public double getBeamDiameterAtExit() {
@@ -43,6 +46,10 @@ public class LaserSpecification {
     public double getBeamDivergence() {
         return beamDivergence;
     }
+    
+    public boolean isMonoEcho() {
+        return monoEcho;
+    }
 
     public String getName() {
         return name;
@@ -50,7 +57,12 @@ public class LaserSpecification {
 
     @Override
     public String toString() {
-        return name;
+        StringBuilder str = new StringBuilder();
+        str.append("Laser ").append(name).append("\n");
+        str.append("  beam diameter at exit (meter) ").append((float) beamDiameterAtExit).append("\n");
+        str.append("  beam divergence (radian) ").append((float) beamDivergence).append("\n");
+        str.append("  mono-echo ").append(monoEcho);
+        return str.toString();
     }
     
     public static List<LaserSpecification> getPresets() {

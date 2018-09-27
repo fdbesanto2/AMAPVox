@@ -648,6 +648,8 @@ public class MainFrameController implements Initializable {
     @FXML
     private CheckBox checkboxCustomLaserSpecification;
     @FXML
+    private CheckBox checkboxMonoEcho;
+    @FXML
     private MenuButton menuButtonAdvisablePADMaxValues;
     @FXML
     private ListView<File> listViewProductsFiles;
@@ -1607,6 +1609,7 @@ public class MainFrameController implements Initializable {
 
             textFieldBeamDiameterAtExit.setText(formatter.format(newValue.getBeamDiameterAtExit()));
             textFieldBeamDivergence.setText(formatter.format(newValue.getBeamDivergence()));
+            checkboxMonoEcho.setSelected(newValue.isMonoEcho());
         });
 
         comboboxLaserSpecification.getSelectionModel().select(LaserSpecification.LMS_Q560);
@@ -1614,6 +1617,7 @@ public class MainFrameController implements Initializable {
         comboboxLaserSpecification.disableProperty().bind(checkboxCustomLaserSpecification.selectedProperty());
         textFieldBeamDiameterAtExit.disableProperty().bind(checkboxCustomLaserSpecification.selectedProperty().not());
         textFieldBeamDivergence.disableProperty().bind(checkboxCustomLaserSpecification.selectedProperty().not());
+        checkboxMonoEcho.disableProperty().bind(checkboxCustomLaserSpecification.selectedProperty().not());
 
         listViewProductsFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -4681,7 +4685,7 @@ public class MainFrameController implements Initializable {
 
         if (checkboxCustomLaserSpecification.isSelected()) {
             try {
-                voxelParameters.setLaserSpecification(new LaserSpecification(Double.valueOf(textFieldBeamDiameterAtExit.getText()), Double.valueOf(textFieldBeamDivergence.getText()), "custom"));
+                voxelParameters.setLaserSpecification(new LaserSpecification("custom", Double.valueOf(textFieldBeamDiameterAtExit.getText()), Double.valueOf(textFieldBeamDivergence.getText()), checkboxMonoEcho.isSelected()));
             } catch (Exception ex) {
                 showErrorDialog(new Exception("Cannot parse laser specification values !", ex));
             }
@@ -4920,6 +4924,7 @@ public class MainFrameController implements Initializable {
 
                                 textFieldBeamDiameterAtExit.setText(formatter.format(laserSpecification.getBeamDiameterAtExit()));
                                 textFieldBeamDivergence.setText(formatter.format(laserSpecification.getBeamDivergence()));
+                                checkboxMonoEcho.setSelected(laserSpecification.isMonoEcho());
                             } else {
                                 checkboxCustomLaserSpecification.setSelected(false);
                                 comboboxLaserSpecification.getSelectionModel().select(laserSpecification);
