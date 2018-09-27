@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation;
 
+import fr.amap.commons.util.filter.Filter;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
@@ -413,6 +414,296 @@ public class TLSVoxelAnalysisTest {
         assert (voxel.nbEchos == 0);
         assert (voxel.nbSampling == 0);
         assert (voxel.bvEntering == 0);
+    }
+
+    @Test
+    public void testShotFilteredEchoes() throws Exception {
+
+        VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
+        // voxel parameters
+        VoxelParameters params = new VoxelParameters.Builder()
+                .voxelSpace(new Point3d(0, 0, 0), new Point3d(5, 5, 5), 1.f, VoxelSpaceInfos.Type.TLS)
+                .echoesWeightByRankParams(EchoesWeightByRankParams.DEFAULT_TLS_WEIGHTING)
+                .laserSpecification(LaserSpecification.LMS_Q780)
+                .padMAX(5.0f).build();
+
+        // voxelisation parameters
+        params.setBeamSectionConstant(true);
+        params.setRayPonderationEnabled(false);
+        // set voxel parameters to voxel analysis configuration
+        cfg.setVoxelParameters(params);
+
+        // list of shots
+        List<Shot> shots = new ArrayList();
+        // shot0, discard 2nd echo
+        shots.add(new Shot(0, new Point3d(0.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 2.d, 3.d}));
+        // shot1, discard 3rd echo
+        shots.add(new Shot(1, new Point3d(1.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 2.d, 3.d}));
+        // shot2, discard all echoes
+        shots.add(new Shot(2, new Point3d(2.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 2.d, 3.d}));
+        // shot3, discard 3rd echo
+        shots.add(new Shot(3, new Point3d(3.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 1.8d, 2.2d, 3.d}));
+        // shot4, discard 2nd & 3rd echo
+        shots.add(new Shot(4, new Point3d(4.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 1.8d, 2.2d, 3.d}));
+
+        // custom echo filter to discard afore-mentionned echoes
+        cfg.addEchoFilter(new Filter<Shot.Echo>() {
+            @Override
+            public void init() throws Exception {
+                // nothing to do
+            }
+
+            @Override
+            public boolean accept(Shot.Echo echo) throws Exception {
+                switch (echo.shot.index) {
+                    case 0:
+                        // discard 2nd echo
+                        return echo.rank != 1;
+                    case 1:
+                        // discard 3rd echo
+                        return echo.rank < 2;
+                    case 2:
+                        // discard all echoes
+                        return false;
+                    case 3:
+                        // discard 3rd echo
+                        return echo.rank != 2;
+                    case 4:
+                        return echo.rank == 0 || echo.rank > 2;
+                    default:
+                        return true;
+                }
+            }
+        });
+
+        // create new voxel analysis
+        AbstractVoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
+        voxAnalysis.createVoxelSpace();
+
+        // process shots
+        for (Shot shot : shots) {
+            voxAnalysis.processOneShot(shot);
+        }
+        // compute plant area 
+        voxAnalysis.computePADs();
+
+        // write voxel file in temporary directory
+        if (WRITE_VOX_FILE) {
+            voxAnalysis.write(VoxelAnalysisCfg.VoxelsFormat.VOXEL, java.io.File.createTempFile("testShotFilteredEchoes", ".vox"));
+        }
+
+        // assertions
+        Voxel voxel;
+        // shot0
+        // voxel with discarded echo is ignored
+        voxel = voxAnalysis.voxels[0][0][2];
+        assert (voxel.nbEchos == 0);
+        assert (voxel.nbSampling == 0);
+        assert (equal(voxel.bvEntering, 0));
+        assert (voxel.bvIntercepted == 0);
+        // following voxel containing one echo
+        voxel = voxAnalysis.voxels[0][0][3];
+        assert (equal(voxel.bvEntering, 1.d / 3.d));
+        assert (voxel.nbEchos == 1);
+        assert (voxel.nbSampling == 1);
+        // last voxel, unsampled
+        voxel = voxAnalysis.voxels[0][0][4];
+        assert (voxel.bvEntering == 0);
+        assert (voxel.nbEchos == 0);
+        assert (voxel.nbSampling == 0);
+
+        // shot1
+        // third voxel with discarded echo
+        voxel = voxAnalysis.voxels[1][0][3];
+        assert (voxel.bvEntering == 0);
+        assert (voxel.nbEchos == 0);
+        assert (voxel.nbSampling == 0);
+
+        // shot2
+        // first voxel sampled only
+        voxel = voxAnalysis.voxels[2][0][0];
+        assert (voxel.nbSampling == 1);
+        // other voxels not sampled
+        for (int k = 1; k < 5; k++) {
+            voxel = voxAnalysis.voxels[2][0][k];
+            assert (voxel.nbEchos == 0);
+            assert (voxel.nbSampling == 0);
+            assert (voxel.bvEntering == 0);
+            assert (voxel.bvIntercepted == 0);
+        }
+
+        // shot3
+        // voxel containing 2nd & 3rd echoes, 3rd one being discarded
+        voxel = voxAnalysis.voxels[3][0][2];
+        assert (equal(voxel.bvEntering, 0.75));
+        assert (equal(voxel.bvIntercepted, 0.25));
+        assert (voxel.nbSampling == 1);
+        assert (voxel.nbEchos == 1);
+        // voxel containing last echo
+        voxel = voxAnalysis.voxels[3][0][3];
+        assert (equal(voxel.bvEntering, 0.25));
+        assert (equal(voxel.bvIntercepted, 0.25));
+        assert (voxel.nbEchos == 1);
+        
+        // shot4
+        // voxel containing 2nd & 3rd echoes, both discarded
+        voxel = voxAnalysis.voxels[4][0][2];
+        assert (voxel.bvEntering == 0);
+        assert (voxel.bvIntercepted == 0);
+        assert (voxel.nbSampling == 0);
+        assert (voxel.nbEchos == 0);
+        // voxel containing last echo
+        voxel = voxAnalysis.voxels[4][0][3];
+        assert (equal(voxel.bvEntering, 0.25));
+        assert (equal(voxel.bvIntercepted, 0.25));
+        assert (voxel.nbEchos == 1);
+
+    }
+    
+    @Test
+    public void testShotFilteredUnderWeightedEchoes() throws Exception {
+        
+        EchoesWeightByRankParams underweight = new EchoesWeightByRankParams(new double[][]{
+            {0.5d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+            {1 / 3.d, 1 / 3.d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+            {0.25d, 0.25d, 0.25d, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+            {0.2d, 0.2d, 0.2d, 0.2d, Double.NaN, Double.NaN, Double.NaN},
+            {1 / 6.d, 1 / 6.d, 1 / 6.d, 1 / 6.d, 1 / 6.d, Double.NaN, Double.NaN},
+            {1 / 7.d, 1 / 7.d, 1 / 7.d, 1 / 7.d, 1 / 7.d, 1 / 7.d, Double.NaN},
+            {1 / 8.d, 1 / 8.d, 1 / 8.d, 1 / 8.d, 1 / 8.d, 1 / 8.d, 1 / 8.d}});
+
+        VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
+        // voxel parameters
+        VoxelParameters params = new VoxelParameters.Builder()
+                .voxelSpace(new Point3d(0, 0, 0), new Point3d(5, 5, 5), 1.f, VoxelSpaceInfos.Type.TLS)
+                .echoesWeightByRankParams(underweight)
+                .laserSpecification(LaserSpecification.LMS_Q780)
+                .padMAX(5.0f).build();
+
+        // voxelisation parameters
+        params.setBeamSectionConstant(true);
+        params.setRayPonderationEnabled(false);
+        // set voxel parameters to voxel analysis configuration
+        cfg.setVoxelParameters(params);
+
+        // list of shots
+        List<Shot> shots = new ArrayList();
+        // shot0, discard 2nd echo
+        shots.add(new Shot(0, new Point3d(0.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 2.d, 3.d}));
+        // shot1, discard 3rd echo
+        shots.add(new Shot(1, new Point3d(1.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 2.d, 3.d}));
+        // shot2, discard all echoes
+        shots.add(new Shot(2, new Point3d(2.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 2.d, 3.d}));
+        // shot3, discard 3rd echo
+        shots.add(new Shot(3, new Point3d(3.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 1.8d, 2.2d, 3.d}));
+        // shot4, discard 2nd & 3rd echo
+        shots.add(new Shot(4, new Point3d(4.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 1.8d, 2.2d, 3.d}));
+
+        // custom echo filter to discard afore-mentionned echoes
+        cfg.addEchoFilter(new Filter<Shot.Echo>() {
+            @Override
+            public void init() throws Exception {
+                // nothing to do
+            }
+
+            @Override
+            public boolean accept(Shot.Echo echo) throws Exception {
+                switch (echo.shot.index) {
+                    case 0:
+                        // discard 2nd echo
+                        return echo.rank != 1;
+                    case 1:
+                        // discard 3rd echo
+                        return echo.rank < 2;
+                    case 2:
+                        // discard all echoes
+                        return false;
+                    case 3:
+                        // discard 3rd echo
+                        return echo.rank != 2;
+                    case 4:
+                        return echo.rank == 0 || echo.rank > 2;
+                    default:
+                        return true;
+                }
+            }
+        });
+
+        // create new voxel analysis
+        AbstractVoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
+        voxAnalysis.createVoxelSpace();
+
+        // process shots
+        for (Shot shot : shots) {
+            voxAnalysis.processOneShot(shot);
+        }
+        // compute plant area 
+        voxAnalysis.computePADs();
+
+        // write voxel file in temporary directory
+        if (WRITE_VOX_FILE) {
+            voxAnalysis.write(VoxelAnalysisCfg.VoxelsFormat.VOXEL, java.io.File.createTempFile("testShotFilteredUnderWeightedEchoes", ".vox"));
+        }
+
+        // assertions
+        Voxel voxel;
+        // shot0
+        // voxel containing third echo
+        voxel = voxAnalysis.voxels[0][0][3];
+        assert (equal(voxel.bvEntering, 0.5));
+        assert (equal(voxel.bvIntercepted, 0.25));
+        assert (voxel.nbEchos == 1);
+        assert (voxel.nbSampling == 1);
+        // last voxel sampled with residual energy
+        voxel = voxAnalysis.voxels[0][0][4];
+        assert (equal(voxel.bvEntering, 0.25));
+        assert (voxel.nbEchos == 0);
+        assert (voxel.bvIntercepted == 0);
+        assert (voxel.nbSampling == 1);
+
+        // shot1
+        // last voxel sampled with residual energy
+        voxel = voxAnalysis.voxels[1][0][4];
+        assert (equal(voxel.bvEntering, 0.25));
+        assert (voxel.nbEchos == 0);
+        assert (voxel.bvIntercepted == 0);
+        assert (voxel.nbSampling == 1);
+
+        // shot2
+        // voxels 1, 2 & 3 not sampled
+        for (int k = 1; k < 4; k++) {
+            voxel = voxAnalysis.voxels[2][0][k];
+            assert (voxel.nbEchos == 0);
+            assert (voxel.nbSampling == 0);
+            assert (voxel.bvEntering == 0);
+            assert (voxel.bvIntercepted == 0);
+        }
+        // last voxel sampled with residual energy
+        voxel = voxAnalysis.voxels[2][0][4];
+        assert (equal(voxel.bvEntering, 0.25));
+        assert (voxel.nbEchos == 0);
+        assert (voxel.nbSampling == 1);
+
+        // shot3
+        // last voxel sampled with residual energy
+        voxel = voxAnalysis.voxels[3][0][4];
+        assert (equal(voxel.bvEntering, 0.2));
+        assert (voxel.nbEchos == 0);
+        assert (voxel.bvIntercepted == 0);
+        assert (voxel.nbSampling == 1);
+        
+        // shot4
+        // voxel containing last echo
+        voxel = voxAnalysis.voxels[4][0][3];
+        assert (equal(voxel.bvEntering, 0.4));
+        assert (equal(voxel.bvIntercepted, 0.2));
+        assert (voxel.nbEchos == 1);
+        // last voxel sampled with residual energy
+        voxel = voxAnalysis.voxels[4][0][4];
+        assert (equal(voxel.bvEntering, 0.2));
+        assert (voxel.nbEchos == 0);
+        assert (voxel.bvIntercepted == 0);
+        assert (voxel.nbSampling == 1);
     }
 
     private boolean equal(double v1, double v2) {
