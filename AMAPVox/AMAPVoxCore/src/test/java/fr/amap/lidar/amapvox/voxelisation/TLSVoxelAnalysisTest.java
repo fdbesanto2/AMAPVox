@@ -351,6 +351,70 @@ public class TLSVoxelAnalysisTest {
         assert (voxel.nbSampling == 1);
     }
 
+    @Test
+    public void testShotMonoEcho() throws Exception {
+
+        VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
+        // voxel parameters
+        VoxelParameters params = new VoxelParameters.Builder()
+                .voxelSpace(new Point3d(0, 0, 0), new Point3d(5, 5, 5), 1.f, VoxelSpaceInfos.Type.TLS)
+                .echoesWeightByRankParams(EchoesWeightByRankParams.DEFAULT_TLS_WEIGHTING)
+                .laserSpecification(LaserSpecification.FARO_FOCUS_X330)
+                .padMAX(10.0f).build();
+        // voxelisation parameters
+        params.setBeamSectionConstant(true);
+        params.setRayPonderationEnabled(false);
+        // set voxel parameters to voxel analysis configuration
+        cfg.setVoxelParameters(params);
+
+        // create new voxel analysis
+        AbstractVoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
+        voxAnalysis.createVoxelSpace();
+
+        // one shot goinp up z-axis without echo
+        voxAnalysis.processOneShot(new Shot(0, new Point3d(0.5, 0.5, 0.5), new Vector3d(0, 0, 1), null));
+        // one shot goinp up z-axis with 1 echo
+        voxAnalysis.processOneShot(new Shot(0, new Point3d(0.5, 1.5, 0.5), new Vector3d(0, 0, 1), new double[]{2.d}));
+        // one shot goinp up z-axis with 2 echoes
+        // (non sense but voxelisation algorithm should stop propagation after first echo anyway)
+        voxAnalysis.processOneShot(new Shot(0, new Point3d(0.5, 2.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 3.d}));
+
+        // compute plant area 
+        voxAnalysis.computePADs();
+
+        // write voxel file in temporary directory
+        if (WRITE_VOX_FILE) {
+            voxAnalysis.write(VoxelAnalysisCfg.VoxelsFormat.VOXEL, java.io.File.createTempFile("testShotMonoEcho", ".vox"));
+        }
+
+        // assertions
+        Voxel voxel;
+        // first shot
+        for (int k = 1; k < 5; k++) {
+            voxel = voxAnalysis.voxels[0][0][k];
+            assert (voxel.nbEchos == 0);
+            assert (voxel.bvEntering == 1);
+            assert (voxel.bvIntercepted == 0);
+            assert (voxel.nbSampling == 1);
+        }
+        // second shot
+        voxel = voxAnalysis.voxels[0][1][2];
+        assert (voxel.nbEchos == 1);
+        assert (voxel.bvIntercepted == 1);
+        voxel = voxAnalysis.voxels[0][1][3];
+        assert (voxel.nbEchos == 0);
+        assert (voxel.nbSampling == 0);
+        assert (voxel.bvEntering == 0);
+        // third shot
+        voxel = voxAnalysis.voxels[0][2][1];
+        assert (voxel.nbEchos == 1);
+        assert (equal(voxel.bvIntercepted, 0.5d));
+        voxel = voxAnalysis.voxels[0][2][2];
+        assert (voxel.nbEchos == 0);
+        assert (voxel.nbSampling == 0);
+        assert (voxel.bvEntering == 0);
+    }
+
     private boolean equal(double v1, double v2) {
         return new BigDecimal(v1, MC).compareTo(new BigDecimal(v2, MC)) == 0;
     }

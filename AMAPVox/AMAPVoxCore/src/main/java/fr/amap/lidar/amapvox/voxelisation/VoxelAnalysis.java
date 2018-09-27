@@ -63,6 +63,7 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
             Shot.Echo echo = echoesContext.nEchoes > 0 ? shot.echoes[rank] : null;
             // loop over the voxels crossed by the shot
             Point3i indices;
+            boolean interruptPropagation = false;
             do {
                 // initialise current voxel and put it in local variable
                 indices = voxelCrossing.indices;
@@ -157,7 +158,15 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
 
                 // decrement beamFractionIn for next voxel
                 beamFractionIn -= bfIntercepted;
-            } while (beamFractionIn > EPSILON && voxelCrossing.indices != null);
+                // check whether the propagation should be interrupted
+                //   residual beam fraction is null
+                //   reached edge of the voxel space
+                //   mono-echo laser and first echo encountered already
+                interruptPropagation = (beamFractionIn < EPSILON)
+                        || (null == voxelCrossing.indices)
+                        || (laserSpec.isMonoEcho() && (null != echo) && (echo.rank > 0));
+
+            } while (!interruptPropagation);
             // shot went through the voxel space
             return true;
         }
