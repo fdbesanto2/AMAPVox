@@ -1,8 +1,9 @@
-### AMAPVox 1.0.3 up to commit e70a8a985bca515ed54035ab5b7f2d685f37bdf7
-Philipe Verley, 2018-09-14 (philippe dot verley at ird.fr)
+### AMAPVox 1.0.4 up to commit d3805daf2ded11065adc2777a24752df24c98a33
+Philipe Verley, 2018-09-27 (philippe dot verley at ird.fr)
 
 # Voxelisation algorithm
-Added new voxelisation options "constant beam section", "last ray truncated" and "ray ponderation enabled" for working around transmittance estimation.
+Added new property laser-specification:mono-echo=true|false to handle properly and distinctively voxelisation for both mono and multi echo lasers.
+Added new voxelisation options "constant beam section", and "ray ponderation enabled" for working around transmittance estimation.
 Fixed a bug that overestimated the beam surface in the voxels.
 Added new output variable bvPotential that estimates the potential beam volume in every voxel disregarding any interception of the shots by the vegetation.
 
