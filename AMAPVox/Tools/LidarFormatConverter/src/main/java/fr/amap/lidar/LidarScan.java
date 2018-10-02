@@ -5,10 +5,7 @@
  */
 package fr.amap.lidar;
 
-import fr.amap.commons.util.Filter;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javax.vecmath.Matrix4d;
 
 /**
@@ -19,14 +16,12 @@ public class LidarScan{
     
     public File file;
     public Matrix4d matrix;
-    public List<Filter> filters;
     public String name;
 
     public LidarScan(File file, Matrix4d matrix, String name) {
         this.file = file;
         this.matrix = matrix;
         this.name = name;
-        filters = new ArrayList<>();
     }
     
     @Override

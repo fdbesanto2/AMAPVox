@@ -332,7 +332,7 @@ public class FXMLController implements Initializable {
                                         case "shots+echoes":
                                             switch (extension) {
                                                 case ".rxp":
-                                                    rxpConverter.toShots(scan, directory, exportReflectance, exportDeviation, exportAmplitude, exportTime, exportXYZ);
+                                                    rxpConverter.toShots(scan, directory, exportReflectance, exportAmplitude, exportDeviation, exportTime, exportXYZ);
                                                     break;
                                                 default:
                                                     break;
@@ -341,7 +341,7 @@ public class FXMLController implements Initializable {
                                         case "shots+echoes+shotTimeStamp":
                                             switch (extension) {
                                                 case ".rxp":
-                                                    rxpConverter.toShots2(scan, directory, exportReflectance, exportDeviation, exportAmplitude, exportTime, exportXYZ);
+                                                    rxpConverter.toShots2(scan, directory, exportReflectance, exportAmplitude, exportDeviation, exportTime, exportXYZ);
                                                     break;
                                                 default:
                                                     break;
